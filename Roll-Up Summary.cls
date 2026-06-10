@@ -24,7 +24,7 @@ public class ContactHandler {
 public static void updateContactCount(List<Contact> newList, List<Contact> oldList){
 
     Set<Id> accountIds = new Set<Id>();
-
+    //Insert/Update/Undelete
     // Collect affected Account Ids
     if(newList != null){
         for(Contact con : newList){
@@ -33,7 +33,7 @@ public static void updateContactCount(List<Contact> newList, List<Contact> oldLi
             }
         }
     }
-
+    //Delete/update
     // For update, collect old Account Ids as well
     // (Contact may move from Account A to Account B)
     if(oldList != null){
