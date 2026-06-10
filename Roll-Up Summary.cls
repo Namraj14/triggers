@@ -1,4 +1,4 @@
-### Count total Contacts on an Account and store it in a custom field.
+### Count total Contacts on an Account and store it in a custom field(Total_Contacts__c).
 
 
 trigger ContactTrigger on Contact (after insert, after update, after delete,after undelete) {
