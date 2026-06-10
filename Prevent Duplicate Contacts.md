@@ -1,13 +1,13 @@
 ### Scenario 1: Prevent users from creating a Contact with the same Email under the same Account
 
-Apex Trigger
+## Apex Trigger
 Trigger Name: ContactTrigger
 
 trigger ContactTrigger on Contact (before insert) {
     ContactHandler.beforeInsert(Trigger.new);
 }
 
-Apex Handler
+##  Apex Handler
 Class Name: ContactHandler
 Description: This class is foro ContactTrigger
 
