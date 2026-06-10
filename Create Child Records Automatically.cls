@@ -35,3 +35,39 @@ public class AccountHandler {
         }
     }
 }
+
+String.isBlank() - Only String has isBlank().
+Returns true if the string is:
+null
+Empty ('')
+Only spaces (' ')
+
+String.isBlank(null);     // true
+String.isBlank('');       // true
+String.isBlank('   ');    // true
+String.isBlank('John');   // false
+
+
+String.isEmpty() - isEmpty() is not only for Strings
+Returns true only if:
+null
+Empty ('')
+
+String.isEmpty(null);    // true
+String.isEmpty('');      // true
+String.isEmpty('   ');   // false
+
+if(contacts.isEmpty()){}
+if(accountIds.isEmpty()){}
+if(accMap.isEmpty()){
+
+}
+Null Check
+if(acc.Name != null)
+Checks only for null.
+
+acc.Name = '';      // passes
+acc.Name = '   ';   // passes
+
+String.isBlank() is only for String variables.
+For other data types, you typically use null checks and collection methods.
