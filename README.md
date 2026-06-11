@@ -22,7 +22,7 @@ Trigger.oldMap: Access directly using record Id
 | Available In  | Update, Delete                      | Update, Delete                  |
 | Example       | `for(Account a : Trigger.old)`      | `Trigger.oldMap.get(acc.Id)`    |
 
-Using Trigger.old (loop through records)
+### Using Trigger.old (loop through records)
 for(Account oldAcc : Trigger.old){
     System.debug(oldAcc.Name);
 }
