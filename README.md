@@ -40,3 +40,8 @@ for(Account acc : Trigger.new){
         System.debug('Name changed');
     }
 }
+
+
+#### Trigger.new vs Trigger.newMap
+
+Both contain the new values of records being inserted or updated.
