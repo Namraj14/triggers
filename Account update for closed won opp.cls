@@ -1,8 +1,8 @@
 Scenario: Update Account to Customer if at least one Opportunity is Closed Won.
 
-trigger OpportunityTrigger on Opportunity (after insert) {
+trigger OpportunityTrigger on Opportunity (after update) {
     if(Trigger.isAfter){
-        if(Trigger.isInsert){
+        if(Trigger.isUpdate){
             OpportunityHandler.closedWonOpp(Trigger.new, Trigger.oldMap);
         }
     }
@@ -125,3 +125,18 @@ for(Contact con : cons){
 }
 
 SOQL outside loop ✅
+
+## Trigger.oldMap Availability
+
+| Context | Available |
+|----------|----------|
+| Before Insert | ❌ |
+| After Insert | ❌ |
+| Before Update | ✅ |
+| After Update | ✅ |
+| Before Delete | ✅ |
+| After Delete | ✅ |
+
+Trigger.oldMap can only be used when a record already existed before the operation (Update/Delete).
+
+For Insert triggers, there is no previous version of the record, so Trigger.old and Trigger.oldMap are not available.
