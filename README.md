@@ -27,11 +27,11 @@ for(Account oldAcc : Trigger.old){
     System.debug(oldAcc.Name);
 }
 
-Using Trigger.oldMap(Here you directly get the old version of a specific record using its Id.)
+### Using Trigger.oldMap(Here you directly get the old version of a specific record using its Id.)
 Account oldAcc = Trigger.oldMap.get(acc.Id);
 System.debug(oldAcc.Name);
 
-Most Common Interview Scenario
+### Most Common Interview Scenario
 Compare old and new values during update:
 for(Account acc : Trigger.new){
     Account oldAcc = Trigger.oldMap.get(acc.Id);
