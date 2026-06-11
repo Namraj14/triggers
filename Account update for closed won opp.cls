@@ -1,62 +1,85 @@
 Scenario: Update Account to Customer if at least one Opportunity is Closed Won.
 
-trigger OpportunityTrigger on Opportunity (after update) {
+trigger OpportunityTrigger on Opportunity (after insert, after update) {
+
     if(Trigger.isAfter){
+
+        if(Trigger.isInsert){
+            OpportunityHandler.handleInsert(Trigger.new);
+        }
+
         if(Trigger.isUpdate){
-            OpportunityHandler.closedWonOpp(Trigger.new, Trigger.oldMap);
+            OpportunityHandler.handleUpdate(
+                Trigger.new,
+                Trigger.oldMap
+            );
         }
     }
 }
-
 public class OpportunityHandler {
 
-    public static void closedWonOpp(
-        List<Opportunity> newList,
-        Map<Id, Opportunity> oldMap
-    ){
+    // Handles Opportunities inserted directly as Closed Won
+    public static void handleInsert(List<Opportunity> newList){
 
-        // Stores Account Ids for Opportunities that changed to Closed Won
         Set<Id> accIds = new Set<Id>();
 
-        // Loop through all updated Opportunities
         for(Opportunity opp : newList){
 
-            // Get the old version of the Opportunity
-            Opportunity oldOpp = oldMap.get(opp.Id);
-
-            // Check if Stage changed from anything to Closed Won
-            if(oldOpp.StageName != 'Closed Won' &&
-               opp.StageName == 'Closed Won' &&
+            if(opp.StageName == 'Closed Won' &&
                opp.AccountId != null){
 
-                // Collect related Account Ids
                 accIds.add(opp.AccountId);
             }
         }
 
-        // Stores Accounts that need to be updated
+        updateAccounts(accIds);
+    }
+
+    // Handles Opportunities updated to Closed Won
+    public static void handleUpdate(
+        List<Opportunity> newList,
+        Map<Id, Opportunity> oldMap
+    ){
+
+        Set<Id> accIds = new Set<Id>();
+
+        for(Opportunity opp : newList){
+
+            Opportunity oldOpp = oldMap.get(opp.Id);
+
+            if(oldOpp.StageName != 'Closed Won' &&
+               opp.StageName == 'Closed Won' &&
+               opp.AccountId != null){
+
+                accIds.add(opp.AccountId);
+            }
+        }
+
+        updateAccounts(accIds);
+    }
+
+    // Common reusable method
+    private static void updateAccounts(Set<Id> accIds){
+
+        if(accIds.isEmpty()){
+            return;
+        }
+
         List<Account> accToUpdate = new List<Account>();
 
-        // Single SOQL query (Bulkified)
         for(Account acc : [
             SELECT Id, Account_Status__c
             FROM Account
             WHERE Id IN :accIds
-            AND Account_Status__c != null
         ]){
 
-            // Skip update if Account is already a Customer
             if(acc.Account_Status__c != 'Customer'){
 
-                // Update Account Status
                 acc.Account_Status__c = 'Customer';
-
-                // Add to update list
                 accToUpdate.add(acc);
             }
         }
 
-        // Perform DML only if there are records to update
         if(!accToUpdate.isEmpty()){
             update accToUpdate;
         }
