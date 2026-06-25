@@ -21,8 +21,7 @@ public class OpportunityHandler {
 
 
 Note: addError() is used to prevent a record from being saved, updated, or deleted and display an error message to the user.
-addError() can only be called on because addError() belongs to sObjects and fields, not collections.
-1. sObjects (Account, Contact, Opportunity, etc.)
+addError() can only be called on individual sObjects (e.g., Case, Account) or individual fields (e.g., case.Status.addError()) because addError() belongs to sObjects and fields, not collections such as List<sObject> or Map<Id, sObject>.1. sObjects (Account, Contact, Opportunity, etc.)
 2. Fields (opp.Name.addError())
 It cannot be called on:List, Set, Map, Id, String
 
