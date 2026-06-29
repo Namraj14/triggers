@@ -1,4 +1,4 @@
-Whenever a new Account is created, if the Account Type is "Customer", send the Account details to an external CRM using a POST REST API call.
+Scenario: Whenever a new Account is created, if the Account Type is "Customer", send the Account details to an external CRM using a POST REST API call.
 
 trigger AccountTrigger on Account (after insert) {
 
