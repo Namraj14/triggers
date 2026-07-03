@@ -140,3 +140,66 @@ public class ERPQueueable implements Queueable, Database.AllowsCallouts{
     }
 
 }
+
+/*
+===============================================================================
+                                NOTES
+===============================================================================
+
+1. Why Queueable Apex?
+   - Queueable Apex executes asynchronously.
+   - It is commonly used for:
+       • HTTP Callouts
+       • Long-running operations
+       • Processing large datasets
+       • Integrations with external systems
+
+2. Why use a Constructor?
+   - The constructor stores data (Order Ids) inside the Queueable object.
+   - Trigger variables exist only during trigger execution.
+   - execute() runs later in a different transaction, so we must persist the data
+     inside the Queueable object.
+
+3. Why pass only Record IDs?
+   - Reduces memory usage.
+   - Prevents stale data.
+   - Allows execute() to query the latest committed records.
+
+4. Why query inside execute()?
+   - The Queueable may run seconds later.
+   - Querying inside execute() ensures the latest database values are used.
+
+5. Why Database.AllowsCallouts?
+   - Required whenever a Queueable makes HTTP or web service callouts.
+   - Without it, Salesforce throws a Callout Exception.
+
+6. Why use a Named Credential?
+   - Avoids hardcoding URLs.
+   - Securely stores authentication.
+   - Easier to change endpoints across environments.
+
+7. Queueable Governor Limits
+   - Maximum 50 Queueable jobs can be enqueued in a single transaction.
+   - A running Queueable can enqueue only ONE child Queueable (Queueable Chaining).
+
+8. Trigger Considerations
+   - Trigger.oldMap is available only in Update and Delete triggers.
+   - Trigger.oldMap is NOT available in Insert triggers.
+
+9. Production Best Practices
+   - Wrap callouts in try-catch.
+   - Log failures instead of using System.debug().
+   - Handle different success codes (200, 201, 202).
+   - Use Custom Metadata or Named Credentials for configuration.
+   - Bulkify the trigger (never enqueue one Queueable per record).
+
+10. Interview Points
+    - Queueable is preferred over Future Methods because it supports:
+        • Complex Objects
+        • Job Monitoring
+        • Chaining
+        • Better Scalability
+        • Callouts
+
+===============================================================================
+*/
