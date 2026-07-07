@@ -1,3 +1,17 @@
+trigger OrderTrigger on Order (after update) {
+    
+    Set<Id> ids = new Set<Id>();
+    for(Order o : Trigger.new){
+        if(o.Status == 'Approved' && Trigger.oldMap.get(o.Id).Status!='Approved'){
+            ids.add(o.Id);
+        }       
+    }
+    if(!ids.isEmpty()){
+        system.enqueueJob(new ERPQueueable(ids));
+    }
+}
+
+
 public class ERPQueueable implements Queueable, Database.AllowsCallouts {
 
     // Stores the Order record Ids received from the Trigger
