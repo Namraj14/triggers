@@ -139,3 +139,11 @@ Records are being restored, so only **new** values exist.
 | Trigger.newMap | Map<Id, SObject> | New records mapped by Id |
 | Trigger.old | List<SObject> | Old version of records |
 | Trigger.oldMap | Map<Id, SObject> | Old records mapped by Id |
+
+
+| User Action                                | Trigger Events Fired             |
+| ------------------------------------------ | -------------------------------- |
+| Create a new record and click **Save**     | `before insert` → `after insert` |
+| Edit an existing record and click **Save** | `before update` → `after update` |
+| Delete a record                            | `before delete` → `after delete` |
+| Restore from Recycle Bin                   | `after undelete`                 |
